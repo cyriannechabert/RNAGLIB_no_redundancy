@@ -1,12 +1,17 @@
 import os
 from tqdm import tqdm
 
+from pathlib import Path
+
 from rnaglib.dataset import RNADataset
 from rnaglib.tasks import ResidueClassificationTask
 from rnaglib.transforms import FeaturesComputer
 from rnaglib.transforms import ResidueAttributeFilter, DummyFilter
 from rnaglib.transforms import ConnectedComponentPartition
 from rnaglib.dataset_transforms import ClusterSplitter
+from rnaglib.dataset_transforms import CDHitComputer
+from rnaglib.dataset_transforms import RedundancyRemover
+from rnaglib.dataset_transforms import StructureDistanceComputer
 
 
 class ChemicalModification(ResidueClassificationTask):
@@ -76,3 +81,27 @@ class ChemicalModification(ResidueClassificationTask):
         dataset = self.create_dataset_from_list(all_rnas)
         print(f"len of process: {len(dataset)}")
         return dataset
+    
+    def post_process(self):
+        """
+        here we don't want to remove redundancy if remove_redundancy is False
+        so we overwrite the post_process method from the parent class, if remove_redundancy is True we remove redundancy 
+        """
+        cd_hit_computer = CDHitComputer(similarity_threshold=0.9)
+        cd_hit_rr = RedundancyRemover(distance_name="cd_hit", threshold=0.9)
+        self.dataset = cd_hit_computer(self.dataset)
+        if self.remove_redundancy:
+            self.dataset = cd_hit_rr(self.dataset)
+
+        us_align_computer = StructureDistanceComputer(name="USalign")
+        us_align_rr = RedundancyRemover(distance_name="USalign", threshold=0.8)
+        self.dataset = us_align_computer(self.dataset)
+        if self.remove_redundancy:
+            self.dataset = us_align_rr(self.dataset)
+
+        # PATCH: delete graphs from dataset/ lost during redundancy removal
+        for f in os.listdir(self.dataset.dataset_path):
+            if Path(f).stem not in self.dataset.all_rnas:
+                os.remove(Path(self.dataset.dataset_path) / f)
+
+        self.dataset.save_distances()
