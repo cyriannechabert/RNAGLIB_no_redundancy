@@ -31,3 +31,4 @@ def get_task(root=".", task_id="rna_cm", **task_kwargs) -> Task:
         module = importlib.import_module("rnaglib.tasks")
         task = getattr(module, cls)
         return task(root=root, **task_kwargs)
+    

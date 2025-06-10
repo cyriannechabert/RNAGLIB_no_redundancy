@@ -48,7 +48,7 @@ class PygModel(torch.nn.Module):
         graph_level=False,
         num_layers=2,
         hidden_channels=128,
-        dropout_rate=0.5,
+        dropout_rate=0.6,
         multi_label=False,
         final_activation="sigmoid",
         device=None

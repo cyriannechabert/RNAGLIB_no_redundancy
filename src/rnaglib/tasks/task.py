@@ -58,9 +58,10 @@ class Task:
             additional_metadata: Optional[Mapping] = None,
             size_thresholds: Optional[Sequence] = None,
             splitter: Optional[Splitter] = None,
+            #remove_redundancy: bool = True, #default value to remove the redundancy
     ):
         self.debug = debug
-
+        #self.remove_redundancy = remove_redundancy
         self.root = root
         self.dataset_path = os.path.join(self.root, "dataset")
         self.in_memory = in_memory
@@ -445,10 +446,10 @@ class Task:
 
     def compute_distances(self):
         self.dataset = self.dataset.similarity_matrix_computer.compute_distances(self.dataset)
-
+"""
     def remove_redundancy(self):
         self.dataset = self.dataset.similarity_matrix_computer.remove_redundancy(self.dataset)
-
+"""
 
 class ClassificationTask(Task):
     def __init__(self, **kwargs):

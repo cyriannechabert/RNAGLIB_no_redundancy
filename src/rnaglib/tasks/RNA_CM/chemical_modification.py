@@ -90,14 +90,15 @@ class ChemicalModification(ResidueClassificationTask):
         cd_hit_computer = CDHitComputer(similarity_threshold=0.9)
         cd_hit_rr = RedundancyRemover(distance_name="cd_hit", threshold=0.9)
         self.dataset = cd_hit_computer(self.dataset)
-        if self.remove_redundancy:
-            self.dataset = cd_hit_rr(self.dataset)
+        #print("test for remove redundancy :", self.remove_redundancy)
+        #if self.remove_redundancy:
+            #self.dataset = cd_hit_rr(self.dataset)
 
         us_align_computer = StructureDistanceComputer(name="USalign")
         us_align_rr = RedundancyRemover(distance_name="USalign", threshold=0.8)
         self.dataset = us_align_computer(self.dataset)
-        if self.remove_redundancy:
-            self.dataset = us_align_rr(self.dataset)
+        #if self.remove_redundancy:
+            #self.dataset = us_align_rr(self.dataset)
 
         # PATCH: delete graphs from dataset/ lost during redundancy removal
         for f in os.listdir(self.dataset.dataset_path):
