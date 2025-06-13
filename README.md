@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center">
 <img src="https://raw.githubusercontent.com/cgoliver/rnaglib/master/images/rgl.png#gh-light-mode-only" width="30%">
 </p>
@@ -200,3 +201,7 @@ here.
    Benchmarking. In RNA 3D Structure Analysis and Prediction N. Leontis & E. Westhof (Eds.), (Vol. 27, pp. 281–298).
    Springer Berlin Heidelberg. doi:10.1007/978-3-642-25740-7\_13
 
+=======
+this is rnaglib without the redundancy
+to test the hypothesis on whether removing the redundancy helps bettering the results
+>>>>>>> b15116c77da04b450405ce1c1d536c62397786d3
